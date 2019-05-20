@@ -47,6 +47,11 @@ public class ItemInfo {
     public int itemType;
 
     /**
+     * Indicates that the widget has been load from default_workspace or not.
+     */
+    public boolean isFromDefaultWorkspace = false;
+
+    /**
      * The id of the container that holds this item. For the desktop, this will be
      * {@link LauncherSettings.Favorites#CONTAINER_DESKTOP}. For the all applications folder it
      * will be {@link #NO_ID} (since it is not stored in the settings DB). For user folders

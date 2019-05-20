@@ -689,6 +689,7 @@ public class LoaderTask implements Runnable {
                                             appWidgetInfo.pendingItemInfo, false);
                                 }
 
+                                appWidgetInfo.isFromDefaultWorkspace = true;
                                 c.checkAndAddItem(appWidgetInfo, mBgDataModel);
                             }
                             break;

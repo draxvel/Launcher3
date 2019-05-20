@@ -64,10 +64,10 @@
         launcher:packageName="com.tkachuk.widgetsample"
         launcher:className="com.tkachuk.widgetsample.NewAppWidget"
         launcher:screen="0"
-        launcher:x="1"
-        launcher:y="-1"
-        launcher:spanX="1"
-        launcher:spanY="1"
+        launcher:x="0"
+        launcher:y="1"
+        launcher:spanX="4"
+        launcher:spanY="3"
         launcher:container="-100"
         launcher:appWidgetId="-1"/>
 

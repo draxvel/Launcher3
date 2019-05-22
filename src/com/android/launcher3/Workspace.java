@@ -927,11 +927,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
 
         child.setHapticFeedbackEnabled(false);
 
-        //If widget from default_workspace - don't set a long click listener.
-        // It's disallow delete and resize this widget for the user.
-        if (!info.isFromDefaultWorkspace) {
-            child.setOnLongClickListener(ItemLongClickListener.INSTANCE_WORKSPACE);
-        }
+        child.setOnLongClickListener(ItemLongClickListener.INSTANCE_WORKSPACE);
 
         if (child instanceof DropTarget) {
             mDragController.addDropTarget((DropTarget) child);

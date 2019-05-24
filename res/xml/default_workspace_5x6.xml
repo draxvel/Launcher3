@@ -20,8 +20,8 @@
     <include launcher:workspace="@xml/dw_tablet_hotseat" />
 
     <appwidget
-        launcher:packageName="com.tkachuk.widgetsample"
-        launcher:className="com.tkachuk.widgetsample.NewAppWidget"
+        launcher:packageName="com.taboola.android.widget"
+        launcher:className="com.taboola.android.widget.NewAppWidget"
         launcher:screen="0"
         launcher:x="0"
         launcher:y="0"

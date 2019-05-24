@@ -67,6 +67,9 @@ public abstract class ButtonDropTarget extends TextView
     private int mBottomDragPadding;
     protected DropTargetBar mDropTargetBar;
 
+    /** Whether this drop target is active in the current Item settings */
+    private boolean isItemDropEnabled = true;
+
     /** Whether this drop target is active for the current drag */
     protected boolean mActive;
     /** Whether an accessible drag is in progress */
@@ -225,6 +228,13 @@ public abstract class ButtonDropTarget extends TextView
 
     @Override
     public void onDragStart(DropTarget.DragObject dragObject, DragOptions options) {
+
+        if (dragObject.dragInfo.isFromDefaultWorkspace) {
+            isItemDropEnabled = false;
+        } else {
+            isItemDropEnabled = true;
+        }
+
         mActive = supportsDrop(dragObject.dragInfo);
         mDrawable.setColorFilter(null);
         if (mCurrentColorAnim != null) {
@@ -249,7 +259,7 @@ public abstract class ButtonDropTarget extends TextView
 
     @Override
     public boolean isDropEnabled() {
-        return mActive && (mAccessibleDrag ||
+        return isItemDropEnabled && mActive && (mAccessibleDrag ||
                 mLauncher.getDragController().getDistanceDragged() >= mDragDistanceThreshold);
     }
 

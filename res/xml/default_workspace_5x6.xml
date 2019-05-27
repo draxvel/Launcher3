@@ -21,7 +21,7 @@
 
     <appwidget
         launcher:packageName="com.taboola.android.widget"
-        launcher:className="com.taboola.android.widget.NewAppWidget"
+        launcher:className="com.taboola.android.widget.AppWidget"
         launcher:screen="0"
         launcher:x="0"
         launcher:y="0"

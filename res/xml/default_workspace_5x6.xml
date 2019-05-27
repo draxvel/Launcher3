@@ -21,12 +21,12 @@
 
     <appwidget
         launcher:packageName="com.taboola.android.widget"
-        launcher:className="com.taboola.android.widget.AppWidget"
+        launcher:className="com.taboola.android.widget.AppWidget5x1"
         launcher:screen="0"
         launcher:x="0"
         launcher:y="0"
         launcher:spanX="5"
-        launcher:spanY="6"
+        launcher:spanY="1"
         launcher:appWidgetId="-1"/>
 
 </favorites>

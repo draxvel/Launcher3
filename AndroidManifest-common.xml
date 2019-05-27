@@ -80,6 +80,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name="com.android.launcher3.AutoAddWidgetReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.launcher3.action.AUTOADDWIDGET"/>
+            </intent-filter>
+        </receiver>
+
         <service
             android:name="com.android.launcher3.uioverrides.dynamicui.WallpaperManagerCompatVL$ColorExtractionService"
             android:exported="false"

@@ -328,7 +328,6 @@ public class LoaderTask implements Runnable {
                 FolderIconPreviewVerifier verifier =
                         new FolderIconPreviewVerifier(mApp.getInvariantDeviceProfile());
                 while (!mStopped && c.moveToNext()) {
-                    Log.d("draxvel", "type: "+c.itemType);
                     try {
                         if (c.user == null) {
                             // User has been deleted, remove the item.

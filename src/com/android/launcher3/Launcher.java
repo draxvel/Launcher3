@@ -25,7 +25,6 @@ import static com.android.launcher3.LauncherState.NORMAL;
 import static com.android.launcher3.dragndrop.DragLayer.ALPHA_INDEX_LAUNCHER_LOAD;
 import static com.android.launcher3.logging.LoggerUtils.newContainerTarget;
 import static com.android.launcher3.logging.LoggerUtils.newTarget;
-import static com.android.launcher3.model.LoaderTask.isValidProvider;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -36,18 +35,15 @@ import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProviderInfo;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks2;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
@@ -60,7 +56,6 @@ import android.os.Parcelable;
 import android.os.Process;
 import android.os.StrictMode;
 import android.os.UserHandle;
-import android.os.UserManager;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.method.TextKeyListener;
@@ -88,7 +83,6 @@ import com.android.launcher3.badge.BadgeInfo;
 import com.android.launcher3.compat.AppWidgetManagerCompat;
 import com.android.launcher3.compat.LauncherAppsCompatVO;
 import com.android.launcher3.config.FeatureFlags;
-import com.android.launcher3.dragndrop.AddItemActivity;
 import com.android.launcher3.dragndrop.DragController;
 import com.android.launcher3.dragndrop.DragLayer;
 import com.android.launcher3.dragndrop.DragView;
@@ -100,7 +94,6 @@ import com.android.launcher3.logging.FileLog;
 import com.android.launcher3.logging.UserEventDispatcher;
 import com.android.launcher3.logging.UserEventDispatcher.UserEventDelegate;
 import com.android.launcher3.model.ModelWriter;
-import com.android.launcher3.model.PackageItemInfo;
 import com.android.launcher3.notification.NotificationListener;
 import com.android.launcher3.popup.PopupContainerWithArrow;
 import com.android.launcher3.popup.PopupDataProvider;
@@ -143,7 +136,6 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -253,7 +245,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
 
     private RotationHelper mRotationHelper;
 
-    private AutoAddWidgetReceiver autoAddWidgetReceiver;
 
     private final Handler mHandler = new Handler();
     private final Runnable mLogOnDelayedResume = this::logOnDelayedResume;
@@ -345,9 +336,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         // Listen for broadcasts
         registerReceiver(mScreenOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 
-        autoAddWidgetReceiver = new AutoAddWidgetReceiver();
-        registerReceiver(autoAddWidgetReceiver, new IntentFilter("com.android.launcher3.action.AUTOADDWIDGET"));
-
         getSystemUiController().updateUiState(SystemUiController.UI_STATE_BASE_WINDOW,
                 Themes.getAttrBoolean(this, R.attr.isWorkspaceDarkText));
 
@@ -357,73 +345,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         mRotationHelper.initialize();
 
         TraceHelper.endSection("Launcher-onCreate");
-
-        UserManager mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
-
-        Collection<AppWidgetProviderInfo> allProvidersMap = mAppWidgetManager.getAllProvidersMap().values();
-
-        for (AppWidgetProviderInfo appWidgetProviderInfo : allProvidersMap){
-            Log.d("draxvel", appWidgetProviderInfo.label);
-        }
-
-//        setCustomWidget();
-    }
-
-    private void setCustomWidget(){
-
-        HashMap<ComponentKey, AppWidgetProviderInfo> widgetList = mAppWidgetManager.getAllProvidersMap();
-
-        AppWidgetProviderInfo widgetSampleProvider = null;
-
-        for(AppWidgetProviderInfo info: widgetList.values()) {
-            if ( info.provider.getPackageName().equals("com.tkachuk.widgetsample") ) {
-                widgetSampleProvider = info;
-            }
-        }
-        int id = getAppWidgetHost().allocateAppWidgetId();
-
-        ComponentName componentName = new ComponentName("com.tkachuk.widgetsample", "com.vakoms.widgetsample.NewAppWidget");
-        UserManager mUserManager = (UserManager) getSystemService(Context.USER_SERVICE);
-//
-//        final AppWidgetProviderInfo provider = widgetList.get(
-//                new ComponentKey(
-//                        componentName,
-//                        mUserManager.getUserForSerialNumber()));
-
-//        final boolean isProviderReady = isValidProvider(provider);
-
-
-//        AppWidgetHostView hostView = getAppWidgetHost().createView(this, id, widgetSampleProvider);
-
-
-        LauncherAppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getLauncherAppWidgetInfo(id);
-
-        LauncherAppWidgetInfo launcherInfo = new LauncherAppWidgetInfo(id, widgetSampleProvider.provider);
-        launcherInfo.spanY = 2;
-        launcherInfo.minSpanX = 2;
-        launcherInfo.minSpanY = 2;
-        launcherInfo.restoreStatus = LauncherAppWidgetInfo.RESTORE_COMPLETED;
-
-        String pkg = launcherInfo.providerName.getPackageName();
-        launcherInfo.pendingItemInfo = new PackageItemInfo(pkg);
-        launcherInfo.pendingItemInfo.user = launcherInfo.user;
-
-        Log.d("draxvel", "my widget id = "+launcherInfo.id);
-        Log.d("draxvel", "my provider id = "+launcherInfo.id);
-
-
-        PendingAddWidgetInfo pendingInfo = new PendingAddWidgetInfo(appWidgetInfo);
-        pendingInfo.spanX = launcherInfo.spanX;
-        pendingInfo.spanY = launcherInfo.spanY;
-        pendingInfo.minSpanX = launcherInfo.minSpanX;
-        pendingInfo.minSpanY = launcherInfo.minSpanY;
-
-
-        List<ItemInfo> items = new ArrayList<>();
-        items.add(launcherInfo);
-
-        addAppWidgetFromDrop(pendingInfo);
-        //bindItems(items, false);
     }
 
     @Override
@@ -1391,7 +1312,6 @@ public class Launcher extends BaseDraggingActivity implements LauncherExterns,
         super.onDestroy();
 
         unregisterReceiver(mScreenOffReceiver);
-        unregisterReceiver(autoAddWidgetReceiver);
         mWorkspace.removeFolderListeners();
 
         UiFactory.setOnTouchControllersChangedListener(this, null);

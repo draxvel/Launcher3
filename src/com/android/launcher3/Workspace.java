@@ -926,9 +926,7 @@ public class Workspace extends PagedView<WorkspacePageIndicator>
         }
 
         child.setHapticFeedbackEnabled(false);
-
         child.setOnLongClickListener(ItemLongClickListener.INSTANCE_WORKSPACE);
-
         if (child instanceof DropTarget) {
             mDragController.addDropTarget((DropTarget) child);
         }

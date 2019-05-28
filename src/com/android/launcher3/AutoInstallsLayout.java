@@ -481,8 +481,6 @@ public class AutoInstallsLayout {
                 return -1;
             }
 
-            Log.d("draxvel", "in PendingWidgetParser, package name:"+packageName);
-
             mValues.put(Favorites.SPANX, getAttributeValue(parser, ATTR_SPAN_X));
             mValues.put(Favorites.SPANY, getAttributeValue(parser, ATTR_SPAN_Y));
             mValues.put(Favorites.ITEM_TYPE, Favorites.ITEM_TYPE_APPWIDGET);
